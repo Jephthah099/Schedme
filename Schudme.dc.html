@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/modernist-ebcb1b87-5dcb-4833-aa2f-7415c48126ad/styles.css">
+<script src="_ds/modernist-ebcb1b87-5dcb-4833-aa2f-7415c48126ad/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<style>
+body{margin:0;background:#f3f2f2;font-family:"Archivo",system-ui,sans-serif}
+a{color:var(--color-accent-700);text-underline-offset:3px}
+a:hover{color:var(--color-accent)}
+.dv-turn{padding:44px 48px 36px;border-bottom:1px solid color-mix(in srgb,#201e1d 11%,transparent)}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 24px}
+.dv-tid{font:800 10px "Archivo",monospace;padding:4px 8px;background:#201e1d;color:#f3f2f2;text-decoration:none;letter-spacing:.08em}
+.dv-tname{font:800 13px/1.2 "Archivo",sans-serif;letter-spacing:.02em}
+.dv-opts{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:12px}
+.dv-oid{font:800 10.5px "Archivo",monospace;padding:4px 8px;background:color-mix(in srgb,#201e1d 12%,transparent);color:#201e1d;text-decoration:none;letter-spacing:.08em}
+.dv-olabel{display:flex;align-items:baseline;gap:10px;font:400 11.5px/1.4 "Archivo",sans-serif;color:color-mix(in srgb,#201e1d 60%,transparent);max-width:420px}
+.dv-opt:target .dv-oid{background:var(--color-accent);color:#f3f2f2}
+.dv-next{margin:26px 0 0;font:400 12px/1.6 "Archivo",sans-serif;color:color-mix(in srgb,#201e1d 55%,transparent)}
+@keyframes bnr{from{transform:translateY(-110%);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">SCHUDME — time planner for medical students</span></div>
+
+<div style="display:flex;gap:48px;align-items:flex-start;margin-bottom:36px;max-width:1180px">
+<div style="flex:1;min-width:300px">
+<div style="font:800 10px 'Archivo';letter-spacing:.14em;color:var(--color-accent-700);text-transform:uppercase;margin-bottom:10px">Brief · assumptions</div>
+<hr class="hr" style="height:1px;border-radius:2px;background:color-mix(in srgb,#201e1d 13%,transparent);margin:0 0 14px">
+<p style="font-size:13.5px;line-height:1.6;max-width:52ch;text-wrap:pretty">Year-3 medical student. Fixed timetable (lectures, labs, ward rounds) with self-directed study wedged between. The app opens on <strong>progress, not the calendar</strong>: the question is "am I hitting my study hours", the schedule is how you answer it.</p>
+<p style="font-size:13.5px;line-height:1.6;max-width:52ch;text-wrap:pretty">Four notification jobs: reminder before a block, nudge when drifting off schedule, end-of-day recap, weekly digest. Copy is neutral and precise — no cheerleading.</p>
+</div>
+<div style="flex:1;min-width:300px">
+<div style="font:800 10px 'Archivo';letter-spacing:.14em;color:var(--color-accent-700);text-transform:uppercase;margin-bottom:10px">System</div>
+<hr class="hr" style="height:1px;border-radius:2px;background:color-mix(in srgb,#201e1d 13%,transparent);margin:0 0 14px">
+<div style="display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:12.5px;line-height:1.5">
+<div style="font-weight:800">Surfaces</div><div>Soft white cards on the warm ground; 24px corners, hairline rules, no heavy boxes.</div>
+<div style="font-weight:800">Category fills</div><div>Lecture = solid ink · Lab = outlined · Clinical = accent field · Study = accent tint.</div>
+<div style="font-weight:800">Accent</div><div>Red carries the primary action, the now-line and the one poster surface (<a class="dv-oid" href="#1c">1c</a>).</div>
+<div style="font-weight:800">Charts</div><div>Outline = planned, solid = actual; round-capped bars and rings.</div>
+<div style="font-weight:800">Photography</div><div>Grayscale only, through the image wrapper.</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Live prototype — tap the bottom bar. Add a real activity, tick blocks off, and drag any block on Today to reschedule it.</div>
+<div style="display:flex;gap:32px;align-items:flex-start">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;display:flex;flex-direction:column;background:#f1efee;color:#201e1d;font-family:'Archivo',system-ui,sans-serif;position:relative;overflow:hidden">
+
+<sc-if value="{{ banner }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;top:58px;left:12px;right:12px;z-index:60;background:#201e1d;color:#f3f2f2;padding:13px 16px;border-radius:20px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 12px 32px rgba(45,43,43,.34);animation:bnr .26s ease-out">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-400)" stroke-width="2" style="flex:none;margin-top:1px"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+<div style="min-width:0">
+<div style="font:800 10px 'Archivo';letter-spacing:.12em;text-transform:uppercase;opacity:.6">Schudme · now</div>
+<div style="font-size:13px;line-height:1.4;margin-top:3px">{{ banner }}</div>
+</div>
+</div>
+</sc-if>
+
+<div style="padding:62px 20px 14px;flex:none;display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+<div>
+<div style="font:800 11px 'Archivo';letter-spacing:.22em;text-transform:uppercase">Schudme</div>
+<div style="font-size:11.5px;white-space:nowrap;color:color-mix(in srgb,#201e1d 55%,transparent);margin-top:2px">{{ headerSub }}</div>
+</div>
+<button onClick="{{ goNotif }}" style="width:44px;height:44px;border:1.5px solid color-mix(in srgb,#201e1d 14%,transparent);border-radius:999px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;color:#201e1d" style-hover="background:color-mix(in srgb,#201e1d 7%,transparent)">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+<span style="position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--color-accent);border-radius:999px"></span>
+</button>
+</div>
+
+<div style="flex:1;overflow:auto">
+
+<sc-if value="{{ isProgress }}" hint-placeholder-val="{{ true }}">
+<div>
+<div style="margin:14px 14px 0;padding:18px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<div style="font:800 10px 'Archivo';letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Study hours logged today</div>
+<div style="display:flex;align-items:flex-end;gap:8px;margin-top:6px">
+<div style="font:800 74px/0.82 'Archivo';letter-spacing:-0.04em">{{ doneH }}</div>
+<div style="font:800 20px/1 'Archivo';padding-bottom:6px;color:color-mix(in srgb,#201e1d 50%,transparent)">/ {{ target }} h</div>
+</div>
+<div style="height:14px;border:0;background:color-mix(in srgb,#201e1d 10%,transparent);border-radius:999px;overflow:hidden;margin-top:14px;display:flex">
+<div style="{{ dayBar }}"></div>
+</div>
+<div style="display:flex;justify-content:space-between;gap:10px;white-space:nowrap;font-size:11px;color:color-mix(in srgb,#201e1d 55%,transparent);margin-top:8px">
+<span>{{ remainingLabel }}</span><span>{{ plannedLabel }}</span>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 14px 0">
+<div style="padding:14px 16px;background:#fff;border-radius:18px;box-shadow:var(--shadow-sm)">
+<div style="font:800 30px/1 'Archivo'">{{ weekHours }}</div>
+<div style="font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb,#201e1d 55%,transparent);margin-top:5px">Hours this week</div>
+</div>
+<div style="padding:14px 16px;background:#fff;border-radius:18px;box-shadow:var(--shadow-sm)">
+<div style="font:800 30px/1 'Archivo'">{{ pct }}%</div>
+<div style="font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb,#201e1d 55%,transparent);margin-top:5px">Planned vs actual</div>
+</div>
+<div style="padding:14px 16px;background:#fff;border-radius:18px;box-shadow:var(--shadow-sm)">
+<div style="font:800 30px/1 'Archivo'">{{ sessions }}</div>
+<div style="font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb,#201e1d 55%,transparent);margin-top:5px">Blocks completed</div>
+</div>
+<div style="padding:14px 16px;background:#fff;border-radius:18px;box-shadow:var(--shadow-sm)">
+<div style="font:800 30px/1 'Archivo';color:var(--color-accent-700)">12 d</div>
+<div style="font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb,#201e1d 55%,transparent);margin-top:5px">Current streak</div>
+</div>
+</div>
+
+<div style="margin:10px 14px 0;padding:18px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<div style="display:flex;align-items:baseline;justify-content:space-between">
+<div style="font:800 15px 'Archivo';white-space:nowrap">Hours per day</div>
+<div style="display:flex;gap:10px;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;align-items:center;white-space:nowrap">
+<span style="display:flex;gap:5px;align-items:center"><span style="width:11px;height:11px;border:1.5px solid #201e1d;border-radius:999px"></span>Planned</span>
+<span style="display:flex;gap:5px;align-items:center"><span style="width:11px;height:11px;background:#201e1d;border-radius:999px"></span>Actual</span>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:16px;align-items:end">
+<sc-for list="{{ week }}" as="d" hint-placeholder-count="7">
+<div>
+<div style="height:112px;position:relative">
+<div style="{{ d.plan }}"></div>
+<div style="{{ d.act }}"></div>
+</div>
+<div style="{{ d.label }}">{{ d.d }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="margin:10px 14px 0;padding:18px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<div style="font:800 15px 'Archivo';margin-bottom:16px">Weekly subject goals</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+<sc-for list="{{ goals }}" as="g" hint-placeholder-count="3">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+<svg width="80" height="80" viewBox="0 0 80 80">
+<circle cx="40" cy="40" r="32" fill="none" stroke="color-mix(in srgb,#201e1d 18%,transparent)" stroke-width="8"></circle>
+<circle cx="40" cy="40" r="32" fill="none" stroke="{{ g.stroke }}" stroke-width="8" stroke-linecap="round" stroke-dasharray="{{ g.dash }}" transform="rotate(-90 40 40)"></circle>
+<text x="40" y="45" text-anchor="middle" font-family="Archivo" font-size="17" font-weight="800" fill="#201e1d">{{ g.pct }}</text>
+</svg>
+<div style="text-align:center">
+<div style="font-size:11px;font-weight:800;letter-spacing:.02em">{{ g.name }}</div>
+<div style="font-size:10.5px;white-space:nowrap;color:color-mix(in srgb,#201e1d 55%,transparent)">{{ g.detail }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="margin:10px 14px 26px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm);overflow:hidden">
+<div class="grayscale" style="height:180px;position:relative">
+<image-slot id="med-hero" shape="rounded" radius="0" fit="cover" placeholder="Drop a stethoscope photo"></image-slot>
+</div>
+<div style="padding:12px 20px 18px">
+<div style="font:800 14px 'Archivo'">Clinical skills block · Ward 4</div>
+<div style="font-size:12px;color:color-mix(in srgb,#201e1d 60%,transparent);margin-top:3px">Next assessed OSCE station in 9 days. 4 of 6 practice sessions logged.</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isToday }}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:12px 14px 0">
+<sc-for list="{{ days }}" as="d" hint-placeholder-count="7">
+<button onClick="{{ d.pick }}" style="{{ d.style }}">
+<span style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.65">{{ d.dow }}</span>
+<span style="font:800 16px 'Archivo';margin-top:3px">{{ d.n }}</span>
+</button>
+</sc-for>
+</div>
+
+<div style="margin:10px 14px 0;padding:12px 14px;display:flex;align-items:center;gap:8px;border-radius:16px;background:var(--color-accent-100)">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-700)" stroke-width="2" style="flex:none"><path d="M4 9h16M4 15h16"></path></svg>
+<div style="font-size:11.5px;color:var(--color-accent-800)">Drag a block to reschedule it — its reminder moves too.</div>
+</div>
+
+<div style="position:relative;margin:10px 14px 26px;padding:14px 14px 20px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<div style="{{ gridStyle }}">
+<sc-for list="{{ hours }}" as="h" hint-placeholder-count="16">
+<div style="{{ h.row }}">
+<div style="font-size:10px;font-weight:800;letter-spacing:.06em;color:color-mix(in srgb,#201e1d 45%,transparent);width:44px;flex:none;padding-top:1px">{{ h.label }}</div>
+<div style="flex:1;height:1px;background:color-mix(in srgb,#201e1d 16%,transparent);margin-top:5px"></div>
+</div>
+</sc-for>
+
+<div style="{{ nowStyle }}">
+<div style="width:8px;height:8px;background:var(--color-accent);border-radius:999px;flex:none"></div>
+<div style="flex:1;height:2px;background:var(--color-accent)"></div>
+<div style="font:800 9.5px 'Archivo';color:var(--color-accent);letter-spacing:.08em">NOW</div>
+</div>
+
+<sc-for list="{{ blocks }}" as="b" hint-placeholder-count="5">
+<div style="{{ b.pos }}">
+<div style="{{ b.look }}">
+<div onPointerDown="{{ b.onDown }}" style="flex:1;min-width:0;padding:9px 10px;cursor:grab;touch-action:none">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="{{ b.tagStyle }}">{{ b.cat }}</span>
+<span style="font-size:10.5px;opacity:.75;white-space:nowrap">{{ b.time }}</span>
+</div>
+<div style="font:800 13.5px/1.25 'Archivo';margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.title }}</div>
+<div style="font-size:10.5px;opacity:.72;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ b.place }}</div>
+</div>
+<button onClick="{{ b.toggle }}" style="{{ b.check }}">
+<sc-if value="{{ b.done }}" hint-placeholder-val="{{ true }}">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"></path></svg>
+</sc-if>
+</button>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAdd }}" hint-placeholder-val="{{ false }}">
+<div style="margin:14px 14px 28px;padding:18px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<h3 style="font-size:24px;margin:0 0 4px">New activity</h3>
+<p style="font-size:12px;color:color-mix(in srgb,#201e1d 58%,transparent);margin-bottom:18px">It lands on Thursday 24 and counts toward your subject goals.</p>
+<hr class="hr" style="height:1px;border-radius:2px;background:color-mix(in srgb,#201e1d 13%,transparent);margin:0 0 18px">
+
+<div class="field" style="margin-bottom:18px">
+<label style="font:800 10px 'Archivo';letter-spacing:.12em;text-transform:uppercase">Title</label>
+<input class="input" value="{{ fTitle }}" onChange="{{ setTitle }}" placeholder="e.g. Renal physiology revision" style="min-height:46px;border-width:1.5px;border-radius:14px;background:#fff;font-size:14px"></input>
+</div>
+
+<div style="margin-bottom:18px">
+<label style="display:block;font:800 10px 'Archivo';letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px">Category</label>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="4">
+<button onClick="{{ c.pick }}" style="{{ c.style }}">{{ c.name }}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
+<div class="field">
+<label style="font:800 10px 'Archivo';letter-spacing:.12em;text-transform:uppercase">Starts</label>
+<input class="input" type="time" value="{{ fStart }}" onChange="{{ setStart }}" style="min-height:46px;border-width:1.5px;border-radius:14px;background:#fff;font-size:14px"></input>
+</div>
+<div>
+<label style="display:block;font:800 10px 'Archivo';letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px">Duration</label>
+<div style="display:flex;border:1.5px solid color-mix(in srgb,#201e1d 16%,transparent);border-radius:16px;height:46px;align-items:stretch;overflow:hidden;background:#fff">
+<button onClick="{{ durDown }}" style="width:44px;border:0;border-right:1px solid color-mix(in srgb,#201e1d 9%,transparent);background:transparent;font:800 18px 'Archivo';cursor:pointer;color:#201e1d">−</button>
+<div style="flex:1;display:flex;align-items:center;justify-content:center;gap:4px;font:800 14px 'Archivo'"><span>{{ fDur }}</span><span>min</span></div>
+<button onClick="{{ durUp }}" style="width:44px;border:0;border-left:1px solid color-mix(in srgb,#201e1d 9%,transparent);background:transparent;font:800 18px 'Archivo';cursor:pointer;color:#201e1d">+</button>
+</div>
+</div>
+</div>
+
+<div style="margin-bottom:22px">
+<label style="display:block;font:800 10px 'Archivo';letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px">Remind me before</label>
+<div style="display:flex">
+<sc-for list="{{ reminds }}" as="r" hint-placeholder-count="3">
+<button onClick="{{ r.pick }}" style="{{ r.style }}">{{ r.name }}</button>
+</sc-for>
+</div>
+</div>
+
+<hr class="hr" style="height:1px;border-radius:2px;background:color-mix(in srgb,#201e1d 13%,transparent);margin:0 0 16px">
+<button class="btn btn-primary btn-block" onClick="{{ submit }}" style="min-height:52px;font-size:15px;padding-left:20px;border-radius:999px">Add to schedule</button>
+<button class="btn btn-secondary btn-block" onClick="{{ goToday }}" style="min-height:48px;border-width:1.5px;border-radius:999px;padding-left:20px">Cancel</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ isGoals }}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="padding:20px;border-bottom:1px solid color-mix(in srgb,#201e1d 11%,transparent)">
+<div style="font:800 10px 'Archivo';letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Plan kept</div>
+<div style="display:flex;align-items:flex-end;gap:10px;margin-top:4px">
+<div style="font:800 62px/0.85 'Archivo';letter-spacing:-0.04em">12</div>
+<div style="font:800 16px/1 'Archivo';padding-bottom:6px;color:color-mix(in srgb,#201e1d 50%,transparent)">days running</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(14,1fr);gap:4px;margin-top:16px">
+<sc-for list="{{ streak }}" as="s" hint-placeholder-count="14">
+<div style="{{ s.style }}"></div>
+</sc-for>
+</div>
+<div style="font-size:11px;color:color-mix(in srgb,#201e1d 55%,transparent);margin-top:8px">Two weeks. One miss on the 10th — post-call day.</div>
+</div>
+
+<div style="margin:10px 14px 0;padding:18px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<div style="font:800 15px 'Archivo';margin-bottom:14px">Weekly hour targets</div>
+<sc-for list="{{ goals }}" as="g" hint-placeholder-count="3">
+<div style="margin-bottom:16px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;white-space:nowrap;font-size:12.5px;line-height:1.4">
+<span style="font-weight:800">{{ g.name }}</span>
+<span style="color:color-mix(in srgb,#201e1d 60%,transparent)">{{ g.detail }}</span>
+</div>
+<div style="height:12px;border:0;background:color-mix(in srgb,#201e1d 10%,transparent);border-radius:999px;overflow:hidden;margin-top:6px;display:flex">
+<div style="{{ g.bar }}"></div>
+</div>
+</div>
+</sc-for>
+</div>
+
+<div style="margin:10px 14px 26px;padding:18px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<div style="font:800 15px 'Archivo';margin-bottom:12px">Deadlines</div>
+<div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid color-mix(in srgb,#201e1d 10%,transparent)">
+<div><div style="font-size:13px;font-weight:800;line-height:1.35">OSCE — cardiovascular station</div><div style="font-size:11px;line-height:1.4;color:color-mix(in srgb,#201e1d 58%,transparent);margin-top:2px">Skills centre · 09:00</div></div>
+<div style="font:800 15px 'Archivo';color:var(--color-accent-700);flex:none;margin-left:12px">9 d</div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid color-mix(in srgb,#201e1d 10%,transparent)">
+<div><div style="font-size:13px;font-weight:800;line-height:1.35">Pathology case write-up</div><div style="font-size:11px;line-height:1.4;color:color-mix(in srgb,#201e1d 58%,transparent);margin-top:2px">2,000 words · submit online</div></div>
+<div style="font:800 15px 'Archivo';flex:none;margin-left:12px">16 d</div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid color-mix(in srgb,#201e1d 10%,transparent)">
+<div><div style="font-size:13px;font-weight:800;line-height:1.35">Pharmacology in-course test</div><div style="font-size:11px;line-height:1.4;color:color-mix(in srgb,#201e1d 58%,transparent);margin-top:2px">Lecture Hall B · 14:00</div></div>
+<div style="font:800 15px 'Archivo';flex:none;margin-left:12px">23 d</div>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+<div>
+<div class="grayscale" style="height:168px;margin:14px 14px 0;border-radius:24px;overflow:hidden">
+<image-slot id="med-portrait" shape="rounded" radius="0" fit="cover" placeholder="Drop a stethoscope / student photo"></image-slot>
+</div>
+<div style="margin:10px 14px 0;padding:16px 18px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<h4 style="margin:0;font-size:21px">{{ studentName }}</h4>
+<div style="font-size:12px;color:color-mix(in srgb,#201e1d 58%,transparent);margin-top:2px">MB ChB Year 3 · Clinical rotations · KNUST</div>
+<div style="display:flex;gap:8px;margin-top:10px">
+<span class="tag tag-accent" style="border-radius:999px;padding:4px 11px">Cardiology block</span>
+<span class="tag tag-neutral" style="border-radius:999px;padding:4px 11px">Week 6 of 8</span>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 14px 0">
+<div style="padding:13px 14px;background:#fff;border-radius:18px;box-shadow:var(--shadow-sm)"><div style="font:800 22px/1 'Archivo'">412</div><div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb,#201e1d 55%,transparent);margin-top:4px">Hours logged</div></div>
+<div style="padding:13px 14px;background:#fff;border-radius:18px;box-shadow:var(--shadow-sm)"><div style="font:800 22px/1 'Archivo'">86%</div><div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb,#201e1d 55%,transparent);margin-top:4px">Plan kept</div></div>
+<div style="padding:13px 14px;background:#fff;border-radius:18px;box-shadow:var(--shadow-sm)"><div style="font:800 22px/1 'Archivo'">31</div><div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:color-mix(in srgb,#201e1d 55%,transparent);margin-top:4px">Best streak</div></div>
+</div>
+<div style="margin:10px 14px 26px;padding:4px 16px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<button onClick="{{ goNotif }}" style="width:100%;min-height:56px;display:flex;align-items:center;gap:12px;background:transparent;border:0;border-bottom:1px solid var(--color-divider);cursor:pointer;color:#201e1d;text-align:left;padding:0" style-hover="background:color-mix(in srgb,#201e1d 5%,transparent)">
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+<span style="flex:1;font-size:14px;font-weight:800">Notifications</span>
+<span style="font-size:11.5px;color:color-mix(in srgb,#201e1d 55%,transparent)">{{ notifSummary }}</span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;opacity:.4"><path d="m9 18 6-6-6-6"></path></svg>
+</button>
+<div style="width:100%;min-height:56px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--color-divider)">
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><circle cx="12" cy="12" r="10"></circle><path d="M12 7v5l3 2"></path></svg>
+<span style="flex:1;font-size:14px;font-weight:800">Daily study target</span>
+<span style="font-size:11.5px;color:color-mix(in srgb,#201e1d 55%,transparent)">{{ target }} hours</span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;opacity:.4"><path d="m9 18 6-6-6-6"></path></svg>
+</div>
+<div style="width:100%;min-height:56px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--color-divider)">
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><rect x="3" y="5" width="18" height="16"></rect><path d="M8 3v4M16 3v4M3 11h18"></path></svg>
+<span style="flex:1;font-size:14px;font-weight:800">Timetable import</span>
+<span style="font-size:11.5px;color:color-mix(in srgb,#201e1d 55%,transparent)">Faculty calendar</span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;opacity:.4"><path d="m9 18 6-6-6-6"></path></svg>
+</div>
+<div style="width:100%;min-height:56px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--color-divider)">
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"></path></svg>
+<span style="flex:1;font-size:14px;font-weight:800">Export study log</span>
+<span style="font-size:11.5px;color:color-mix(in srgb,#201e1d 55%,transparent)">CSV</span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none;opacity:.4"><path d="m9 18 6-6-6-6"></path></svg>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isNotif }}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="margin:10px 14px 0;padding:18px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<button onClick="{{ goProfile }}" class="btn btn-ghost" style="padding:0;margin-bottom:8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase">← Profile</button>
+<h4 style="margin:0;font-size:21px">Notifications</h4>
+<p style="font-size:12px;color:color-mix(in srgb,#201e1d 58%,transparent);margin:4px 0 0">Four jobs. Nothing else gets to interrupt a ward round.</p>
+</div>
+
+<div style="margin:12px 14px 0;padding:4px 16px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<button onClick="{{ tBefore }}" style="{{ rowStyle }}">
+<div style="flex:1;min-width:0;text-align:left">
+<div style="font-size:13.5px;font-weight:800">Before a block starts</div>
+<div style="font-size:11.5px;color:color-mix(in srgb,#201e1d 58%,transparent);margin-top:2px">10 minutes ahead, with the room</div>
+</div>
+<span style="{{ swBefore }}"><span style="{{ knBefore }}"></span></span>
+</button>
+<button onClick="{{ tDrift }}" style="{{ rowStyle }}">
+<div style="flex:1;min-width:0;text-align:left">
+<div style="font-size:13.5px;font-weight:800">Off-schedule nudge</div>
+<div style="font-size:11.5px;color:color-mix(in srgb,#201e1d 58%,transparent);margin-top:2px">When a block runs 15 min past its slot</div>
+</div>
+<span style="{{ swDrift }}"><span style="{{ knDrift }}"></span></span>
+</button>
+<button onClick="{{ tRecap }}" style="{{ rowStyle }}">
+<div style="flex:1;min-width:0;text-align:left">
+<div style="font-size:13.5px;font-weight:800">End-of-day recap</div>
+<div style="font-size:11.5px;color:color-mix(in srgb,#201e1d 58%,transparent);margin-top:2px">21:30 — hours, blocks kept, tomorrow's first</div>
+</div>
+<span style="{{ swRecap }}"><span style="{{ knRecap }}"></span></span>
+</button>
+<button onClick="{{ tDigest }}" style="{{ rowStyle }}">
+<div style="flex:1;min-width:0;text-align:left">
+<div style="font-size:13.5px;font-weight:800">Weekly statistics digest</div>
+<div style="font-size:11.5px;color:color-mix(in srgb,#201e1d 58%,transparent);margin-top:2px">Sunday 18:00 — subject hours and trend</div>
+</div>
+<span style="{{ swDigest }}"><span style="{{ knDigest }}"></span></span>
+</button>
+</div>
+
+<div style="margin:12px 14px 0;padding:16px;background:#fff;border-radius:24px;box-shadow:var(--shadow-sm)">
+<div style="font:800 10px 'Archivo';letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:12px">What they look like</div>
+<div style="background:#201e1d;color:#f3f2f2;padding:13px 16px;border-radius:18px;margin-bottom:10px">
+<div style="font:800 9.5px 'Archivo';letter-spacing:.12em;text-transform:uppercase;opacity:.55">Schudme · 12:50</div>
+<div style="font-size:13px;font-weight:800;margin-top:4px">Ward round in 10 minutes</div>
+<div style="font-size:12px;opacity:.8">Ward 4 · consultant round · 60 min</div>
+</div>
+<div style="background:var(--color-accent);color:#f3f2f2;padding:13px 16px;border-radius:18px;margin-bottom:10px">
+<div style="font:800 9.5px 'Archivo';letter-spacing:.12em;text-transform:uppercase;opacity:.75">Schudme · 16:45</div>
+<div style="font-size:13px;font-weight:800;margin-top:4px">You are 15 minutes behind</div>
+<div style="font-size:12px;opacity:.9">Move OSCE practice to 18:00, or cut it to 45 min.</div>
+</div>
+<div style="border:1.5px solid color-mix(in srgb,#201e1d 16%,transparent);border-radius:16px;padding:12px 14px;margin-bottom:8px">
+<div style="font:800 9.5px 'Archivo';letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,#201e1d 50%,transparent)">Schudme · 21:30</div>
+<div style="font-size:13px;font-weight:800;margin-top:4px">5.5 of 8 study hours today</div>
+<div style="font-size:12px;color:color-mix(in srgb,#201e1d 65%,transparent)">4 of 6 blocks kept. Tomorrow starts 08:00, Cardiology.</div>
+</div>
+<div style="border:1.5px solid color-mix(in srgb,#201e1d 16%,transparent);border-radius:16px;padding:12px 14px">
+<div style="font:800 9.5px 'Archivo';letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,#201e1d 50%,transparent)">Schudme · Sunday 18:00</div>
+<div style="font-size:13px;font-weight:800;margin-top:4px">Week 6: 31.5 h, up 2.5 h</div>
+<div style="font-size:12px;color:color-mix(in srgb,#201e1d 65%,transparent)">Pharmacology is 2.5 h short of target.</div>
+</div>
+</div>
+
+<div style="padding:14px 14px 28px">
+<button class="btn btn-secondary btn-block" onClick="{{ testNotif }}" style="min-height:48px;border-width:1.5px;border-radius:999px;padding-left:20px">Send a test notification</button>
+</div>
+</div>
+</sc-if>
+
+</div>
+
+<div style="flex:none;background:#fff;border-radius:26px 26px 0 0;box-shadow:0 -2px 14px rgba(45,43,43,.07);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:22px;position:relative;z-index:20">
+<button onClick="{{ goProgress }}" style="{{ navBase }}">
+<sc-if value="{{ isProgress }}" hint-placeholder-val="{{ true }}"><span style="{{ navMark }}"></span></sc-if>
+<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3-9 4 18 3-9h4"></path></svg>
+<span style="font-size:9px;letter-spacing:.09em;text-transform:uppercase;font-weight:800;margin-top:5px">Progress</span>
+</button>
+<button onClick="{{ goToday }}" style="{{ navBase }}">
+<sc-if value="{{ isToday }}" hint-placeholder-val="{{ false }}"><span style="{{ navMark }}"></span></sc-if>
+<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16"></rect><path d="M8 3v4M16 3v4M3 11h18"></path></svg>
+<span style="font-size:9px;letter-spacing:.09em;text-transform:uppercase;font-weight:800;margin-top:5px">Today</span>
+</button>
+<button onClick="{{ goAdd }}" style="{{ navAdd }}">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"></path></svg>
+<span style="font-size:9px;letter-spacing:.09em;text-transform:uppercase;font-weight:800;margin-top:5px">Add</span>
+</button>
+<button onClick="{{ goGoals }}" style="{{ navBase }}">
+<sc-if value="{{ isGoals }}" hint-placeholder-val="{{ false }}"><span style="{{ navMark }}"></span></sc-if>
+<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.4"></circle></svg>
+<span style="font-size:9px;letter-spacing:.09em;text-transform:uppercase;font-weight:800;margin-top:5px">Goals</span>
+</button>
+<button onClick="{{ goProfile }}" style="{{ navBase }}">
+<sc-if value="{{ isPerson }}" hint-placeholder-val="{{ false }}"><span style="{{ navMark }}"></span></sc-if>
+<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 0 0-16 0"></path><circle cx="12" cy="7" r="4"></circle></svg>
+<span style="font-size:9px;letter-spacing:.09em;text-transform:uppercase;font-weight:800;margin-top:5px">You</span>
+</button>
+</div>
+
+</div>
+</x-import>
+
+<div style="width:240px;flex:none;padding-top:8px">
+<div style="font:800 10px 'Archivo';letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Notes</div>
+<hr class="hr" style="height:1px;border-radius:2px;background:color-mix(in srgb,#201e1d 13%,transparent);margin:8px 0 12px">
+<div style="font-size:11.5px;line-height:1.55;color:color-mix(in srgb,#201e1d 68%,transparent);display:flex;flex-direction:column;gap:12px">
+<div><strong style="color:#201e1d">Progress first.</strong> The hero is one number: hours against today's target. Everything under it is evidence.</div>
+<div><strong style="color:#201e1d">Outline vs solid.</strong> Planned is drawn, actual is filled — no colour coding to learn.</div>
+<div><strong style="color:#201e1d">Drag on Today.</strong> Snaps to 15 minutes, clamped 06:00–22:00, and confirms with the banner the real reminder would use.</div>
+<div><strong style="color:#201e1d">Photo slots.</strong> The two grayscale panels are empty until you drop real photographs on them.</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Android parity — the notification surfaces off-app: lock screen and a drifting-day nudge.</div>
+<div style="display:flex;gap:28px">
+<x-import component-from-global-scope="AndroidDevice" from="./android-frame.jsx" dark="{{ yes }}" hint-size="412px,892px">
+<div style="height:100%;position:relative;overflow:hidden;background:#0d0c0c;font-family:'Archivo',system-ui,sans-serif">
+<div class="grayscale" style="position:absolute;inset:0">
+<image-slot id="med-lock" shape="rect" fit="cover" placeholder="Drop a stethoscope photo — lock screen"></image-slot>
+</div>
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,12,12,.72) 0%,rgba(13,12,12,.45) 42%,rgba(13,12,12,.86) 100%);pointer-events:none"></div>
+<div style="position:relative;height:100%;display:flex;flex-direction:column;padding:26px 20px 40px;color:#f3f2f2;pointer-events:none">
+<div style="font:800 12px 'Archivo';letter-spacing:.18em;text-transform:uppercase;opacity:.7">Thursday 24 September</div>
+<div style="font:800 84px/0.85 'Archivo';letter-spacing:-0.05em;margin-top:6px">12:50</div>
+<div style="margin-top:auto;display:flex;flex-direction:column;gap:10px">
+<div style="background:#f3f2f2;color:#201e1d;padding:14px 16px;border-radius:24px">
+<div style="display:flex;align-items:center;gap:7px;font:800 9.5px 'Archivo';letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">
+<span style="width:8px;height:8px;background:var(--color-accent);border-radius:999px"></span>Schudme · now
+</div>
+<div style="font-size:14.5px;font-weight:800;margin-top:5px">Ward round in 10 minutes</div>
+<div style="font-size:12.5px;opacity:.72;margin-top:1px">Ward 4 · consultant round · 60 min</div>
+<div style="display:flex;gap:8px;margin-top:11px">
+<span style="border:1.5px solid #201e1d;border-radius:999px;padding:7px 14px;font:800 10.5px 'Archivo';letter-spacing:.06em;text-transform:uppercase">Snooze 10</span>
+<span style="background:var(--color-accent);color:#f3f2f2;border-radius:999px;padding:7px 14px;font:800 10.5px 'Archivo';letter-spacing:.06em;text-transform:uppercase">Open plan</span>
+</div>
+</div>
+<div style="background:var(--color-accent);color:#f3f2f2;padding:14px 16px;border-radius:24px">
+<div style="font:800 9.5px 'Archivo';letter-spacing:.12em;text-transform:uppercase;opacity:.8">Schudme · 11:20</div>
+<div style="font-size:14px;font-weight:800;margin-top:4px">Anatomy ran 25 min long</div>
+<div style="font-size:12.5px;opacity:.92;margin-top:1px">Shift the rest of the day back, or drop Path notes?</div>
+</div>
+<div style="border:1.5px solid rgba(243,242,242,.3);border-radius:22px;padding:13px 16px">
+<div style="font:800 9.5px 'Archivo';letter-spacing:.12em;text-transform:uppercase;opacity:.6">Schudme · yesterday 21:30</div>
+<div style="font-size:13.5px;font-weight:800;margin-top:4px">6.5 of 8 study hours</div>
+<div style="font-size:12px;opacity:.72;margin-top:1px">Streak held — 12 days.</div>
+</div>
+</div>
+</div>
+</div>
+</x-import>
+
+<div style="width:230px;flex:none;padding-top:8px">
+<div style="font:800 10px 'Archivo';letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Off-app rules</div>
+<hr class="hr" style="height:1px;border-radius:2px;background:color-mix(in srgb,#201e1d 13%,transparent);margin:8px 0 12px">
+<div style="font-size:11.5px;line-height:1.55;color:color-mix(in srgb,#201e1d 68%,transparent);display:flex;flex-direction:column;gap:12px">
+<div><strong style="color:#201e1d">One red per stack.</strong> Only the nudge that needs a decision takes the accent field; reminders and recaps stay ink or outline.</div>
+<div><strong style="color:#201e1d">Actions, not applause.</strong> Every notification offers the two moves you would actually make.</div>
+<div><strong style="color:#201e1d">Quiet hours.</strong> Nothing fires during a timetabled clinical block except the block's own reminder.</div>
+<div>iOS uses the same three tiers — see the previews inside <a class="dv-oid" href="#1a">1a</a> under Notifications.</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Poster dashboard — the same data with the accent run as a field. Alternative treatment for the Progress screen.</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="height:100%;background:var(--color-accent);color:#f3f2f2;font-family:'Archivo',system-ui,sans-serif;display:flex;flex-direction:column;padding:64px 22px 34px;overflow:hidden">
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:800 11px 'Archivo';letter-spacing:.22em;text-transform:uppercase">Schudme</div>
+<div style="font:800 11px 'Archivo';letter-spacing:.1em;text-transform:uppercase;opacity:.75">Thu 24 Sep</div>
+</div>
+<div style="height:2px;background:rgba(243,242,242,.5);margin:14px 0 26px"></div>
+<div style="font:800 12px 'Archivo';letter-spacing:.14em;text-transform:uppercase;opacity:.8">Study hours today</div>
+<div style="display:flex;align-items:flex-end;gap:10px;margin-top:2px">
+<div style="font:800 148px/0.78 'Archivo';letter-spacing:-0.06em">5.5</div>
+<div style="font:800 26px/1 'Archivo';padding-bottom:14px;opacity:.7">/8</div>
+</div>
+<div style="height:16px;background:rgba(243,242,242,.28);border-radius:999px;overflow:hidden;margin-top:20px;display:flex">
+<div style="width:69%;background:#f3f2f2;border-radius:999px"></div>
+</div>
+<div style="display:flex;justify-content:space-between;font-size:11.5px;opacity:.85;margin-top:8px">
+<span>2.5 h to target</span><span>4 of 6 blocks kept</span>
+</div>
+<div style="height:2px;background:rgba(243,242,242,.5);margin:26px 0 20px"></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end">
+<sc-for list="{{ week }}" as="d" hint-placeholder-count="7">
+<div>
+<div style="height:96px;position:relative">
+<div style="{{ d.planLight }}"></div>
+<div style="{{ d.actLight }}"></div>
+</div>
+<div style="font:800 9.5px 'Archivo';letter-spacing:.08em;text-align:center;margin-top:7px;opacity:.85">{{ d.d }}</div>
+</div>
+</sc-for>
+</div>
+<div style="margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:14px">
+<div style="font:800 15px/1.25 'Archivo';max-width:60%">Pharmacology is 2.5 h short of this week's target.</div>
+<div style="border:1.5px solid #f3f2f2;border-radius:999px;padding:10px 16px;font:800 10.5px 'Archivo';letter-spacing:.08em;text-transform:uppercase;flex:none">Fix the plan</div>
+</div>
+</div>
+</x-import>
+</div>
+
+</div>
+
+<p class="dv-next">Try next: "make <a class="dv-oid" href="#1c">1c</a> the real Progress screen in <a class="dv-oid" href="#1a">1a</a>" · "add a week calendar screen" · "show the off-schedule nudge as an in-app sheet with reschedule options"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;studentName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Ama Boateng&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;dailyTarget&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:8,&quot;min&quot;:4,&quot;max&quot;:14,&quot;unit&quot;:&quot;h&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;denseAgenda&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'progress',
+    banner: null,
+    day: 'THU',
+    dragId: null,
+    activities: [
+      { id: 1, title: 'Cardiology lecture', place: 'Lecture Hall B', cat: 'Lecture', start: 480, dur: 90, done: true },
+      { id: 2, title: 'Anatomy dissection', place: 'Lab 2 · thorax', cat: 'Lab', start: 600, dur: 120, done: true },
+      { id: 3, title: 'Ward round', place: 'Ward 4 · consultant', cat: 'Clinical', start: 780, dur: 60, done: false },
+      { id: 4, title: 'Pharmacology revision', place: 'Library, 3rd floor', cat: 'Study', start: 900, dur: 90, done: false },
+      { id: 5, title: 'OSCE practice — pairs', place: 'Skills centre', cat: 'Clinical', start: 1050, dur: 60, done: false },
+      { id: 6, title: 'Path notes review', place: 'Anki + summary sheet', cat: 'Study', start: 1200, dur: 45, done: false },
+    ],
+    toggles: { before: true, drift: true, recap: true, digest: false },
+    form: { title: '', cat: 'Study', start: '14:00', dur: 60, remind: '10 min' },
+  };
+
+  pxh() { return this.props.denseAgenda ? 46 : 62; }
+  fmt(m) {
+    const h = Math.floor(m / 60), mm = m % 60;
+    return String(h).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
+  }
+  flash(msg) {
+    clearTimeout(this._t);
+    this.setState({ banner: msg });
+    this._t = setTimeout(() => this.setState({ banner: null }), 3600);
+  }
+  componentWillUnmount() { clearTimeout(this._t); }
+  go(screen) { return () => this.setState({ screen }); }
+  toggle(id) {
+    this.setState(s => ({
+      activities: s.activities.map(a => a.id === id ? { ...a, done: !a.done } : a),
+    }));
+  }
+  onDown(id) {
+    return (e) => {
+      e.preventDefault();
+      const a = this.state.activities.find(x => x.id === id);
+      if (!a) return;
+      const y0 = e.clientY, s0 = a.start, pxh = this.pxh();
+      this.setState({ dragId: id });
+      const move = (ev) => {
+        const dm = Math.round(((ev.clientY - y0) / pxh * 60) / 15) * 15;
+        const ns = Math.max(360, Math.min(1320 - a.dur, s0 + dm));
+        this.setState(s => ({ activities: s.activities.map(x => x.id === id ? { ...x, start: ns } : x) }));
+      };
+      const up = () => {
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        const cur = this.state.activities.find(x => x.id === id);
+        this.setState({ dragId: null });
+        if (cur && cur.start !== s0) this.flash(cur.title + ' moved to ' + this.fmt(cur.start) + ' — reminder set for ' + this.fmt(cur.start - 10) + '.');
+      };
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+    };
+  }
+  tog(k, label) {
+    return () => this.setState(s => {
+      const on = !s.toggles[k];
+      clearTimeout(this._t);
+      this._t = setTimeout(() => this.setState({ banner: null }), 3600);
+      return { toggles: { ...s.toggles, [k]: on }, banner: label + (on ? ' on.' : ' off.') };
+    });
+  }
+  sw(on) {
+    return {
+      width: 52, height: 30, borderRadius: 999, border: '1.5px solid color-mix(in srgb,#201e1d 22%,transparent)', flex: 'none', display: 'flex',
+      alignItems: 'center', padding: 3, background: on ? 'var(--color-accent)' : 'transparent',
+      justifyContent: on ? 'flex-end' : 'flex-start', transition: 'background .15s',
+    };
+  }
+  kn(on) { return { width: 20, height: 20, borderRadius: 999, background: on ? '#f3f2f2' : '#201e1d', display: 'block' }; }
+
+  catLook(c, done, dragging) {
+    const base = {
+      display: 'flex', alignItems: 'stretch', height: '100%', overflow: 'hidden', borderRadius: 18, boxSizing: 'border-box',
+      boxShadow: dragging ? '0 12px 32px rgba(45,43,43,.3)' : 'none',
+    };
+    const map = {
+      Lecture: { background: '#201e1d', color: '#f3f2f2', border: '2px solid #201e1d' },
+      Lab: { background: '#f3f2f2', color: '#201e1d', border: '2px solid #201e1d' },
+      Clinical: { background: 'var(--color-accent)', color: '#f3f2f2', border: '2px solid var(--color-accent)' },
+      Study: { background: 'var(--color-accent-100)', color: 'var(--color-accent-900)', border: '2px solid var(--color-accent-500)' },
+    };
+    const look = { ...base, ...(map[c] || map.Study) };
+    if (!done) look.backgroundImage = 'repeating-linear-gradient(135deg, rgba(255,255,255,0) 0 9px, rgba(255,255,255,.14) 9px 18px)';
+    return look;
+  }
+  tagLook(c) {
+    const dark = c === 'Lecture' || c === 'Clinical';
+    return {
+      font: '800 8.5px "Archivo"', letterSpacing: '.12em', textTransform: 'uppercase',
+      padding: '2px 8px', flex: 'none', borderRadius: 999,
+      border: dark ? '1px solid rgba(243,242,242,.55)' : '1px solid currentColor',
+    };
+  }
+  checkLook(c, done) {
+    const dark = c === 'Lecture' || c === 'Clinical';
+    const line = dark ? 'rgba(243,242,242,.4)' : 'color-mix(in srgb,#201e1d 20%,transparent)';
+    return {
+      width: 46, flex: 'none', border: 0, borderLeft: '2px solid ' + line, cursor: 'pointer',
+      background: done ? (dark ? 'rgba(243,242,242,.16)' : '#201e1d') : 'transparent',
+      color: done ? (dark ? '#f3f2f2' : '#f3f2f2') : 'currentColor',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+    };
+  }
+
+  renderVals() {
+    const s = this.state, p = this.props;
+    const target = p.dailyTarget ?? 8;
+    const pxh = this.pxh();
+    const acts = [...s.activities].sort((a, b) => a.start - b.start);
+    const studyMin = acts.reduce((t, a) => t + a.dur, 0);
+    const doneMin = acts.filter(a => a.done).reduce((t, a) => t + a.dur, 0);
+    const doneH = Math.round(doneMin / 6) / 10;
+    const pct = studyMin ? Math.round(doneMin / studyMin * 100) : 0;
+    const dayFrac = Math.min(1, doneMin / 60 / target);
+
+    const weekRaw = [
+      { d: 'M', plan: 7, act: 6.5 }, { d: 'T', plan: 8, act: 8 }, { d: 'W', plan: 6.5, act: 5 },
+      { d: 'T', plan: 7.5, act: doneH }, { d: 'F', plan: 6, act: 0 }, { d: 'S', plan: 4, act: 0 }, { d: 'S', plan: 3, act: 0 },
+    ];
+    const MAXH = 9;
+    const week = weekRaw.map((w, i) => {
+      const today = i === 3;
+      return {
+        d: w.d,
+        plan: { position: 'absolute', left: 0, right: 0, bottom: 0, height: Math.round(w.plan / MAXH * 112), border: '1.5px solid color-mix(in srgb,#201e1d 28%,transparent)', borderBottom: 0, borderRadius: '10px 10px 0 0' },
+        act: { position: 'absolute', left: 0, right: 0, bottom: 0, height: Math.round(w.act / MAXH * 112), background: today ? 'var(--color-accent)' : '#201e1d', borderRadius: '10px 10px 0 0', transformOrigin: 'bottom', animation: 'grow .5s ease-out' },
+        planLight: { position: 'absolute', left: 0, right: 0, bottom: 0, height: Math.round(w.plan / MAXH * 96), border: '1.5px solid rgba(243,242,242,.55)', borderBottom: 0, borderRadius: '10px 10px 0 0' },
+        actLight: { position: 'absolute', left: 0, right: 0, bottom: 0, height: Math.round(w.act / MAXH * 96), background: '#f3f2f2', borderRadius: '10px 10px 0 0' },
+        label: { font: '800 9.5px "Archivo"', letterSpacing: '.08em', textAlign: 'center', marginTop: 7, color: today ? 'var(--color-accent-700)' : 'color-mix(in srgb,#201e1d 55%,transparent)' },
+      };
+    });
+
+    const goalRaw = [
+      { name: 'Cardiology', done: 6.5, goal: 8 },
+      { name: 'Anatomy', done: 4, goal: 6 },
+      { name: 'Pharmacology', done: 2.5, goal: 5 },
+    ];
+    const C = 2 * Math.PI * 32;
+    const goals = goalRaw.map(g => {
+      const f = Math.min(1, g.done / g.goal);
+      return {
+        name: g.name, detail: g.done + ' / ' + g.goal + ' h', pct: Math.round(f * 100) + '%',
+        dash: (C * f).toFixed(1) + ' ' + C.toFixed(1),
+        stroke: f >= 1 ? '#201e1d' : 'var(--color-accent)',
+        bar: { width: (f * 100).toFixed(0) + '%', borderRadius: 999, background: f >= 0.8 ? '#201e1d' : 'var(--color-accent)' },
+      };
+    });
+
+    const hours = [];
+    for (let h = 6; h <= 22; h++) hours.push({
+      label: this.fmt(h * 60),
+      row: { position: 'absolute', left: 0, right: 0, top: (h - 6) * pxh, display: 'flex', gap: 10 },
+    });
+
+    const blocks = acts.map(a => ({
+      id: a.id, title: a.title, place: a.place, cat: a.cat, done: a.done,
+      time: this.fmt(a.start) + '–' + this.fmt(a.start + a.dur),
+      pos: { position: 'absolute', left: 54, right: 0, top: (a.start - 360) / 60 * pxh, height: Math.max(56, a.dur / 60 * pxh - 6), zIndex: s.dragId === a.id ? 6 : 2 },
+      look: this.catLook(a.cat, a.done, s.dragId === a.id),
+      tagStyle: this.tagLook(a.cat),
+      check: this.checkLook(a.cat, a.done),
+      onDown: this.onDown(a.id),
+      toggle: () => this.toggle(a.id),
+    }));
+
+    const NOW = 770;
+    const dayNums = [['MON', 21], ['TUE', 22], ['WED', 23], ['THU', 24], ['FRI', 25], ['SAT', 26], ['SUN', 27]];
+    const days = dayNums.map(([dow, n]) => {
+      const on = s.day === dow;
+      return {
+        dow, n, pick: () => this.setState({ day: dow }),
+        style: {
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          minHeight: 56, cursor: 'pointer', border: 0, borderRadius: 16,
+          background: on ? '#201e1d' : 'transparent', color: on ? '#f3f2f2' : '#201e1d',
+        },
+      };
+    });
+
+    const cats = ['Study', 'Lecture', 'Lab', 'Clinical'].map(name => {
+      const on = s.form.cat === name;
+      return {
+        name, pick: () => this.setState(st => ({ form: { ...st.form, cat: name } })),
+        style: {
+          minHeight: 44, cursor: 'pointer', font: '800 12.5px "Archivo"', textAlign: 'left', paddingLeft: 12,
+          border: '1.5px solid ' + (on ? '#201e1d' : 'color-mix(in srgb,#201e1d 16%,transparent)'), borderRadius: 14,
+          background: on ? '#201e1d' : 'transparent', color: on ? '#f3f2f2' : '#201e1d',
+        },
+      };
+    });
+
+    const reminds = ['5 min', '10 min', '30 min'].map((name, i) => {
+      const on = s.form.remind === name;
+      return {
+        name, pick: () => this.setState(st => ({ form: { ...st.form, remind: name } })),
+        style: {
+          flex: 1, minHeight: 44, cursor: 'pointer', font: '800 12.5px "Archivo"',
+          border: '1.5px solid color-mix(in srgb,#201e1d 16%,transparent)', borderLeft: i === 0 ? '1.5px solid color-mix(in srgb,#201e1d 16%,transparent)' : 0, borderRadius: i === 0 ? '999px 0 0 999px' : (i === 2 ? '0 999px 999px 0' : 0),
+          background: on ? 'var(--color-accent)' : 'transparent', color: on ? '#f3f2f2' : '#201e1d',
+        },
+      };
+    });
+
+    const streak = [];
+    for (let i = 0; i < 14; i++) streak.push({
+      style: { height: 26, borderRadius: 9, background: i === 3 ? 'transparent' : (i > 10 ? 'var(--color-accent)' : '#201e1d'), border: i === 3 ? '2px solid var(--color-divider)' : 0 },
+    });
+
+    const t = s.toggles;
+    const onCount = Object.values(t).filter(Boolean).length;
+
+    return {
+      yes: true,
+      studentName: p.studentName ?? 'Ama Boateng',
+      target, doneH, pct,
+      sessions: acts.filter(a => a.done).length + ' / ' + acts.length,
+      weekHours: (Math.round((25 + doneMin / 60) * 10) / 10) + ' h',
+      remainingLabel: doneMin / 60 >= target ? 'Target met' : (Math.round((target - doneMin / 60) * 10) / 10) + ' h to target',
+      plannedLabel: Math.round(studyMin / 6) / 10 + ' h planned',
+      dayBar: { width: (dayFrac * 100).toFixed(1) + '%', borderRadius: 999, background: 'var(--color-accent)', transition: 'width .35s ease-out' },
+      headerSub: 'Thursday 24 September · Week 6',
+      banner: s.banner,
+      isProgress: s.screen === 'progress',
+      isToday: s.screen === 'today',
+      isAdd: s.screen === 'add',
+      isGoals: s.screen === 'goals',
+      isProfile: s.screen === 'profile' || s.screen === 'notif',
+      isPerson: s.screen === 'profile',
+      isNotif: s.screen === 'notif',
+      goProgress: this.go('progress'), goToday: this.go('today'), goAdd: this.go('add'),
+      goGoals: this.go('goals'), goProfile: this.go('profile'), goNotif: this.go('notif'),
+      navBase: { position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 62, border: 0, background: 'transparent', color: '#201e1d', cursor: 'pointer', padding: '8px 0' },
+      navAdd: { position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 62, border: 0, background: 'var(--color-accent)', color: '#f3f2f2', cursor: 'pointer', padding: '8px 0', borderRadius: 22, margin: '7px 8px' },
+      navMark: { position: 'absolute', top: 4, left: '50%', transform: 'translateX(-50%)', width: 22, height: 3.5, borderRadius: 999, background: 'var(--color-accent)' },
+      week, goals, hours, blocks, days, cats, reminds, streak,
+      gridStyle: { position: 'relative', height: 16 * pxh + 20 },
+      nowStyle: { position: 'absolute', left: 0, right: 0, top: (NOW - 360) / 60 * pxh, display: 'flex', alignItems: 'center', gap: 6, zIndex: 4, pointerEvents: 'none' },
+      fTitle: s.form.title, fStart: s.form.start, fDur: s.form.dur,
+      setTitle: (e) => { const v = e.target.value; this.setState(st => ({ form: { ...st.form, title: v } })); },
+      setStart: (e) => { const v = e.target.value; this.setState(st => ({ form: { ...st.form, start: v } })); },
+      durUp: () => this.setState(st => ({ form: { ...st.form, dur: Math.min(240, st.form.dur + 15) } })),
+      durDown: () => this.setState(st => ({ form: { ...st.form, dur: Math.max(15, st.form.dur - 15) } })),
+      submit: () => {
+        const f = this.state.form;
+        const title = (f.title || '').trim() || (f.cat + ' block');
+        const [hh, mm] = f.start.split(':').map(Number);
+        const start = Math.max(360, Math.min(1320 - f.dur, hh * 60 + mm));
+        this.setState(st => ({
+          screen: 'today',
+          activities: [...st.activities, { id: Date.now(), title, place: 'Added just now', cat: f.cat, start, dur: f.dur, done: false }],
+          form: { ...st.form, title: '' },
+        }));
+        this.flash(title + ' added at ' + this.fmt(start) + ' — reminder ' + f.remind + ' before.');
+      },
+      rowStyle: { width: '100%', minHeight: 64, display: 'flex', alignItems: 'center', gap: 14, background: 'transparent', border: 0, borderBottom: '1px solid color-mix(in srgb,#201e1d 10%,transparent)', cursor: 'pointer', color: '#201e1d', padding: '12px 2px' },
+      swBefore: this.sw(t.before), knBefore: this.kn(t.before), tBefore: this.tog('before', 'Pre-block reminders'),
+      swDrift: this.sw(t.drift), knDrift: this.kn(t.drift), tDrift: this.tog('drift', 'Off-schedule nudges'),
+      swRecap: this.sw(t.recap), knRecap: this.kn(t.recap), tRecap: this.tog('recap', 'End-of-day recap'),
+      swDigest: this.sw(t.digest), knDigest: this.kn(t.digest), tDigest: this.tog('digest', 'Weekly digest'),
+      notifSummary: onCount + ' of 4 on',
+      testNotif: () => this.flash('Pharmacology revision starts in 10 minutes — Library, 3rd floor.'),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  Lecture
+  Lab
+  Clinical
+  Study
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  title     String
+  place     String
+  category  Category
+  date      DateTime // calendar date this block is scheduled on (time component ignored)
+  start     Int // minutes from midnight
+  duration  Int // minutes
+  done      Boolean  @default(false)
+  remind    Int      @default(10) // minutes before start
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+}
+
+model SubjectGoal {
+  id        String @id @default(cuid())
+  subject   String
+  hoursGoal Float
+  hoursDone Float
+}
+
+model Deadline {
+  id       String   @id @default(cuid())
+  title    String
+  subtitle String
+  dueDate  DateTime
+}
+
+model DayLog {
+  id    String   @id @default(cuid())
+  date  DateTime @unique
+  kept  Boolean
+}
+
+model NotificationToggle {
+  id      String  @id @default(cuid())
+  key     String  @unique // before | drift | recap | digest
+  enabled Boolean @default(true)
+}
+
+model ProfileInfo {
+  id           String @id @default(cuid())
+  name         String
+  subtitle     String
+  hoursLogged  Int
+  planKeptPct  Int
+  bestStreak   Int
+  dailyTargetH Float
+}

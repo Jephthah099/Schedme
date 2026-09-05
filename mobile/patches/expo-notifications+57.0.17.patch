@@ -1,0 +1,26 @@
+diff --git a/node_modules/expo-notifications/build/DevicePushTokenAutoRegistration.fx.js b/node_modules/expo-notifications/build/DevicePushTokenAutoRegistration.fx.js
+index 85cd97c..d9e7e4c 100644
+--- a/node_modules/expo-notifications/build/DevicePushTokenAutoRegistration.fx.js
++++ b/node_modules/expo-notifications/build/DevicePushTokenAutoRegistration.fx.js
+@@ -1,5 +1,6 @@
+ import 'abort-controller/polyfill';
+-import { UnavailabilityError } from 'expo-modules-core';
++import { isRunningInExpoGo } from 'expo';
++import { Platform, UnavailabilityError } from 'expo-modules-core';
+ import ServerRegistrationModule from './ServerRegistrationModule';
+ import { addPushTokenListener } from './TokenEmitter';
+ import { getDevicePushTokenAsync } from './getDevicePushTokenAsync';
+@@ -72,7 +73,12 @@ export async function __handlePersistedRegistrationInfoAsync(registrationInfo) {
+         console.warn('[expo-notifications] Error encountered while updating server registration with latest device push token.', e);
+     }
+ }
+-if (ServerRegistrationModule.getRegistrationInfoAsync) {
++// PATCH (see expo/expo#49044): addPushTokenListener() throws on Android in Expo
++// Go because push isn't supported there from SDK 53+, but this auto-registration
++// listener is wired up unconditionally at module scope — skip it in that case so
++// local notifications keep working.
++const skipAutoRegistrationInExpoGo = isRunningInExpoGo() && Platform.OS === 'android';
++if (!skipAutoRegistrationInExpoGo && ServerRegistrationModule.getRegistrationInfoAsync) {
+     // A global scope (to get all the updates) device push token
+     // subscription, never cleared.
+     addPushTokenListener(async (token) => {
