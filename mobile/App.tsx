@@ -4,12 +4,13 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import {
-  useFonts,
-  Archivo_400Regular,
-  Archivo_600SemiBold,
-  Archivo_800ExtraBold,
-} from "@expo-google-fonts/archivo";
+// Importing from the package root would bundle all 18 Archivo weight/style
+// files even though only 3 are used — these subpath imports pull in just
+// the specific font files (and useFonts, which has no font assets of its own).
+import { useFonts } from "@expo-google-fonts/archivo/useFonts";
+import { Archivo_400Regular } from "@expo-google-fonts/archivo/400Regular";
+import { Archivo_600SemiBold } from "@expo-google-fonts/archivo/600SemiBold";
+import { Archivo_800ExtraBold } from "@expo-google-fonts/archivo/800ExtraBold";
 import { RootNavigator } from "./src/navigation/RootNavigator";
 import { Banner } from "./src/components/Banner";
 import { useAppStore } from "./src/store/useAppStore";
