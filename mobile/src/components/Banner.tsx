@@ -1,11 +1,5 @@
-import React, { useEffect } from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-  Easing,
-} from "react-native-reanimated";
+import React, { useEffect, useRef } from "react";
+import { Animated, Easing, Pressable, StyleSheet, Text, View } from "react-native";
 import { Bell } from "lucide-react-native";
 import { useAppStore } from "../store/useAppStore";
 import { color, font, radius, shadow } from "../theme/tokens";
@@ -13,30 +7,40 @@ import { color, font, radius, shadow } from "../theme/tokens";
 export function Banner() {
   const banner = useAppStore((s) => s.banner);
   const dismissBanner = useAppStore((s) => s.dismissBanner);
-  const progress = useSharedValue(0);
+  const progress = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    progress.value = withTiming(banner ? 1 : 0, {
+    Animated.timing(progress, {
+      toValue: banner ? 1 : 0,
       duration: 260,
       easing: Easing.out(Easing.ease),
-    });
+      useNativeDriver: true,
+    }).start();
   }, [banner]);
-
-  const style = useAnimatedStyle(() => ({
-    opacity: progress.value,
-    transform: [{ translateY: (1 - progress.value) * -80 }],
-  }));
 
   if (!banner) return null;
 
   return (
-    <Animated.View style={[styles.wrap, style]} pointerEvents="box-none">
+    <Animated.View
+      style={[
+        styles.wrap,
+        {
+          opacity: progress,
+          transform: [
+            {
+              translateY: progress.interpolate({ inputRange: [0, 1], outputRange: [-80, 0] }),
+            },
+          ],
+        },
+      ]}
+      pointerEvents="box-none"
+    >
       <Pressable style={styles.card} onPress={dismissBanner}>
         <Bell size={18} color={color.accent500} />
-        <Animated.View style={styles.textCol}>
+        <View style={styles.textCol}>
           <Text style={styles.eyebrow}>SCHEDME · NOW</Text>
           <Text style={styles.message}>{banner}</Text>
-        </Animated.View>
+        </View>
       </Pressable>
     </Animated.View>
   );

@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import React, { useEffect, useRef } from "react";
+import { Animated, StyleSheet, View } from "react-native";
 import { color, radius } from "../theme/tokens";
 
 interface Props {
@@ -17,20 +16,27 @@ export function ProgressBarPill({
   fillColor = color.accent,
 }: Props) {
   const clamped = Math.max(0, Math.min(1, pct));
-  const width = useSharedValue(clamped);
+  const width = useRef(new Animated.Value(clamped)).current;
 
   useEffect(() => {
-    width.value = withTiming(clamped, { duration: 350 });
+    Animated.timing(width, {
+      toValue: clamped,
+      duration: 350,
+      useNativeDriver: false, // width isn't supported by the native driver
+    }).start();
   }, [clamped]);
-
-  const style = useAnimatedStyle(() => ({
-    width: `${width.value * 100}%`,
-  }));
 
   return (
     <View style={[styles.track, { height, backgroundColor: trackColor, borderRadius: radius.pill }]}>
       <Animated.View
-        style={[styles.fill, style, { backgroundColor: fillColor, borderRadius: radius.pill }]}
+        style={[
+          styles.fill,
+          {
+            width: width.interpolate({ inputRange: [0, 1], outputRange: ["0%", "100%"] }),
+            backgroundColor: fillColor,
+            borderRadius: radius.pill,
+          },
+        ]}
       />
     </View>
   );

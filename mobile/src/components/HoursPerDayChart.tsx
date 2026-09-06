@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import React, { useEffect, useRef } from "react";
+import { Animated, StyleSheet, Text, View } from "react-native";
 import { DayBar } from "../lib/deriveStats";
 import { color, font, radius } from "../theme/tokens";
 
@@ -8,12 +7,15 @@ const BOX_HEIGHT = 112;
 const SCALE_HOURS = 9;
 
 function AnimatedBar({ heightPx, color: fill }: { heightPx: number; color: string }) {
-  const h = useSharedValue(0);
+  const h = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-    h.value = withTiming(heightPx, { duration: 500 });
+    Animated.timing(h, {
+      toValue: heightPx,
+      duration: 500,
+      useNativeDriver: false, // height isn't supported by the native driver
+    }).start();
   }, [heightPx]);
-  const style = useAnimatedStyle(() => ({ height: h.value }));
-  return <Animated.View style={[styles.actualBar, style, { backgroundColor: fill }]} />;
+  return <Animated.View style={[styles.actualBar, { height: h, backgroundColor: fill }]} />;
 }
 
 export function HoursPerDayChart({ days }: { days: DayBar[] }) {

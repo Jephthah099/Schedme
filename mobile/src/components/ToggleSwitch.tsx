@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import { Pressable, StyleSheet } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import React, { useEffect, useRef } from "react";
+import { Animated, Pressable, StyleSheet } from "react-native";
 import { color } from "../theme/tokens";
 
 interface Props {
@@ -14,19 +13,28 @@ const PADDING = 3;
 const KNOB = HEIGHT - PADDING * 2;
 
 export function ToggleSwitch({ value, onChange }: Props) {
-  const progress = useSharedValue(value ? 1 : 0);
+  const progress = useRef(new Animated.Value(value ? 1 : 0)).current;
 
   useEffect(() => {
-    progress.value = withTiming(value ? 1 : 0, { duration: 150 });
+    Animated.timing(progress, {
+      toValue: value ? 1 : 0,
+      duration: 150,
+      useNativeDriver: false, // backgroundColor isn't supported by the native driver
+    }).start();
   }, [value]);
 
-  const trackStyle = useAnimatedStyle(() => ({
-    backgroundColor: value ? color.accent : "transparent",
-  }));
-  const knobStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: progress.value * (WIDTH - KNOB - PADDING * 2) }],
-    backgroundColor: value ? "#f3f2f2" : color.ink,
-  }));
+  const trackColor = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["transparent", color.accent],
+  });
+  const knobColor = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [color.ink, "#f3f2f2"],
+  });
+  const knobTranslate = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, WIDTH - KNOB - PADDING * 2],
+  });
 
   return (
     <Pressable
@@ -34,8 +42,12 @@ export function ToggleSwitch({ value, onChange }: Props) {
       hitSlop={8}
       style={[styles.track, { borderColor: color.softBorder }]}
     >
-      <Animated.View style={[StyleSheet.absoluteFill, styles.trackFill, trackStyle]} />
-      <Animated.View style={[styles.knob, knobStyle]} />
+      <Animated.View
+        style={[StyleSheet.absoluteFill, styles.trackFill, { backgroundColor: trackColor }]}
+      />
+      <Animated.View
+        style={[styles.knob, { backgroundColor: knobColor, transform: [{ translateX: knobTranslate }] }]}
+      />
     </Pressable>
   );
 }

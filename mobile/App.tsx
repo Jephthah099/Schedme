@@ -14,7 +14,7 @@ import { RootNavigator } from "./src/navigation/RootNavigator";
 import { Banner } from "./src/components/Banner";
 import { useAppStore } from "./src/store/useAppStore";
 import { color } from "./src/theme/tokens";
-import "./src/notifications/scheduler";
+import { ensureAndroidChannel } from "./src/notifications/scheduler";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,6 +25,7 @@ export default function App() {
   const hydrate = useAppStore((s) => s.hydrate);
 
   useEffect(() => {
+    ensureAndroidChannel();
     hydrate();
   }, [hydrate]);
 

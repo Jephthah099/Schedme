@@ -18,7 +18,9 @@ export async function ensureAndroidChannel() {
   if (Platform.OS !== "android") return;
   await Notifications.setNotificationChannelAsync("default", {
     name: "Schedme",
-    importance: Notifications.AndroidImportance.DEFAULT,
+    importance: Notifications.AndroidImportance.HIGH,
+    lightColor: "#ec3013",
+    vibrationPattern: [0, 200, 100, 200],
   });
 }
 
@@ -50,8 +52,13 @@ export async function scheduleActivityReminder(activity: Activity) {
     content: {
       title: `${activity.title} in ${activity.remind} minutes`,
       body: `${activity.place} · ${activity.duration} min`,
+      color: "#ec3013",
     },
-    trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: fireAt },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.DATE,
+      date: fireAt,
+      channelId: "default",
+    },
   });
 }
 
@@ -80,8 +87,14 @@ export async function setRecapEnabled(enabled: boolean) {
     content: {
       title: "End-of-day recap",
       body: "Hours logged, blocks kept, and tomorrow's first block.",
+      color: "#ec3013",
     },
-    trigger: { type: Notifications.SchedulableTriggerInputTypes.DAILY, hour: 21, minute: 30 },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.DAILY,
+      hour: 21,
+      minute: 30,
+      channelId: "default",
+    },
   });
 }
 
@@ -94,12 +107,14 @@ export async function setDigestEnabled(enabled: boolean) {
     content: {
       title: "Weekly statistics digest",
       body: "Subject hours and trend for the week.",
+      color: "#ec3013",
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
       weekday: 1, // Expo convention: 1 = Sunday
       hour: 18,
       minute: 0,
+      channelId: "default",
     },
   });
 }
@@ -110,6 +125,7 @@ export async function sendTestNotification() {
     content: {
       title: "Ward round in 10 minutes",
       body: "Ward 4 · consultant round · 60 min",
+      color: "#ec3013",
     },
     trigger: null,
   });

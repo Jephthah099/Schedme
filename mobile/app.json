@@ -27,9 +27,16 @@
       [
         "expo-notifications",
         {
+          "icon": "./assets/android-icon-monochrome.png",
           "color": "#ec3013"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "2f5ca97e-cb55-44e9-9300-05641acd707f"
+      }
+    },
+    "owner": "jeff66"
   }
 }

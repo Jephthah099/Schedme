@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useRef, useState } from "react";
+import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { Check } from "lucide-react-native";
 import { Activity } from "../types";
 import { categoryStyle, color, font, radius, shadow } from "../theme/tokens";
@@ -19,46 +18,40 @@ interface Props {
 
 export function ScheduleBlock({ activity, rowHeight, gridStartMinutes, onDragEnd, onToggleDone }: Props) {
   const [isDragging, setIsDragging] = useState(false);
-  const translateY = useSharedValue(0);
+  const translateY = useRef(new Animated.Value(0)).current;
+  const dragDelta = useRef(0);
   const setDragId = useAppStore((s) => s.setDragId);
 
   const top = ((activity.start - gridStartMinutes) / 60) * rowHeight;
   const height = Math.max(56, (activity.duration / 60) * rowHeight - 6);
   const cat = categoryStyle[activity.category];
 
-  const startDrag = () => {
-    setIsDragging(true);
-    setDragId(activity.id);
-  };
-  const endDrag = (newStart: number) => {
-    setIsDragging(false);
-    setDragId(null);
-    onDragEnd(activity.id, newStart);
-  };
-
+  // Runs on the JS thread (see .runOnJS(true) below) so plain Animated.Value
+  // updates are safe here without needing react-native-reanimated worklets.
   const pan = Gesture.Pan()
+    .runOnJS(true)
     .onStart(() => {
-      runOnJS(startDrag)();
+      setIsDragging(true);
+      setDragId(activity.id);
     })
     .onUpdate((e) => {
-      translateY.value = e.translationY;
+      dragDelta.current = e.translationY;
+      translateY.setValue(e.translationY);
     })
     .onEnd(() => {
-      const deltaMinutes = Math.round((translateY.value / rowHeight) * 60 / 15) * 15;
-      translateY.value = withTiming(0, { duration: 150 });
-      runOnJS(endDrag)(activity.start + deltaMinutes);
+      const deltaMinutes = Math.round((dragDelta.current / rowHeight) * 60 / 15) * 15;
+      Animated.timing(translateY, { toValue: 0, duration: 150, useNativeDriver: true }).start();
+      setIsDragging(false);
+      setDragId(null);
+      onDragEnd(activity.id, activity.start + deltaMinutes);
     });
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: translateY.value }],
-  }));
 
   return (
     <GestureDetector gesture={pan}>
       <Animated.View
         style={[
           styles.block,
-          animatedStyle,
+          { transform: [{ translateY }] },
           {
             top,
             height,

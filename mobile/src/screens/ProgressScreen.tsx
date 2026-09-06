@@ -51,10 +51,14 @@ export function ProgressScreen() {
 
       {/* Summary tiles */}
       <View style={styles.tileGrid}>
-        <StatTile number={`${round1(hoursOf(activities))}`} label="Hours this week" />
-        <StatTile number={`${pctWeek}%`} label="Planned vs actual" />
-        <StatTile number={blocks.label} label="Blocks completed" />
-        <StatTile number={`${streak.current} d`} label="Current streak" numberColor={color.accent700} />
+        <View style={styles.tileRow}>
+          <StatTile number={`${round1(hoursOf(activities))}`} label="Hours this week" />
+          <StatTile number={`${pctWeek}%`} label="Planned vs actual" />
+        </View>
+        <View style={styles.tileRow}>
+          <StatTile number={blocks.label} label="Blocks completed" />
+          <StatTile number={`${streak.current}d`} label="Current streak" numberColor={color.accent700} />
+        </View>
       </View>
 
       {/* Hours per day */}
@@ -146,11 +150,13 @@ const styles = StyleSheet.create({
     color: color.mutedText,
   },
   tileGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
     gap: 10,
     marginHorizontal: 14,
     marginTop: 10,
+  },
+  tileRow: {
+    flexDirection: "row",
+    gap: 10,
   },
   chartCard: {
     marginHorizontal: 14,
