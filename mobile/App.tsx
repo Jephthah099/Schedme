@@ -12,8 +12,10 @@ import { Archivo_400Regular } from "@expo-google-fonts/archivo/400Regular";
 import { Archivo_600SemiBold } from "@expo-google-fonts/archivo/600SemiBold";
 import { Archivo_800ExtraBold } from "@expo-google-fonts/archivo/800ExtraBold";
 import { RootNavigator } from "./src/navigation/RootNavigator";
+import { AuthNavigator } from "./src/navigation/AuthNavigator";
 import { Banner } from "./src/components/Banner";
 import { useAppStore } from "./src/store/useAppStore";
+import { useAuthStore } from "./src/store/useAuthStore";
 import { color } from "./src/theme/tokens";
 import { ensureAndroidChannel } from "./src/notifications/scheduler";
 
@@ -23,14 +25,20 @@ export default function App() {
     Archivo_600SemiBold,
     Archivo_800ExtraBold,
   });
+  const authStatus = useAuthStore((s) => s.status);
+  const bootstrap = useAuthStore((s) => s.bootstrap);
   const hydrate = useAppStore((s) => s.hydrate);
 
   useEffect(() => {
     ensureAndroidChannel();
-    hydrate();
-  }, [hydrate]);
+    bootstrap();
+  }, [bootstrap]);
 
-  if (!fontsLoaded) {
+  useEffect(() => {
+    if (authStatus === "authenticated") hydrate();
+  }, [authStatus, hydrate]);
+
+  if (!fontsLoaded || authStatus === "loading") {
     return (
       <View style={styles.loading}>
         <ActivityIndicator color={color.accent} />
@@ -43,7 +51,7 @@ export default function App() {
       <SafeAreaProvider>
         <NavigationContainer>
           <View style={{ flex: 1 }}>
-            <RootNavigator />
+            {authStatus === "authenticated" ? <RootNavigator /> : <AuthNavigator />}
             <Banner />
           </View>
         </NavigationContainer>

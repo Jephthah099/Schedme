@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import { authRouter } from "./routes/auth";
 import { activitiesRouter } from "./routes/activities";
 import { goalsRouter } from "./routes/goals";
 import { deadlinesRouter } from "./routes/deadlines";
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 
+app.use("/api/auth", authRouter);
 app.use("/api/activities", activitiesRouter);
 app.use("/api/goals", goalsRouter);
 app.use("/api/deadlines", deadlinesRouter);

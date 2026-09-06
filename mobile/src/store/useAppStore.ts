@@ -57,9 +57,15 @@ interface AppState {
   setForm: (patch: Partial<ActivityForm>) => void;
   resetForm: () => void;
   toggle: (key: ToggleKey, enabled: boolean) => Promise<void>;
+  addGoal: (subject: string, hoursGoal: number) => Promise<void>;
+  deleteGoal: (id: string) => Promise<void>;
+  addDeadline: (title: string, subtitle: string, dueDate: string) => Promise<void>;
+  deleteDeadline: (id: string) => Promise<void>;
+  updateProfile: (patch: Partial<Pick<ProfileInfo, "name" | "subtitle" | "dailyTargetH">>) => Promise<void>;
   showBanner: (msg: string) => void;
   dismissBanner: () => void;
   setDragId: (id: string | null) => void;
+  reset: () => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -194,6 +200,49 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
   },
 
+  addGoal: async (subject, hoursGoal) => {
+    const created = await api.post<SubjectGoal>("/api/goals", { subject, hoursGoal });
+    set({ goals: [...get().goals, created] });
+  },
+  deleteGoal: async (id) => {
+    const prev = get().goals;
+    set({ goals: prev.filter((g) => g.id !== id) });
+    try {
+      await api.del(`/api/goals/${id}`);
+    } catch (e: any) {
+      set({ goals: prev, error: e?.message ?? "Couldn't delete that goal." });
+    }
+  },
+
+  addDeadline: async (title, subtitle, dueDate) => {
+    const created = await api.post<Deadline>("/api/deadlines", { title, subtitle, dueDate });
+    set({ deadlines: [...get().deadlines, created].sort((a, b) => a.dueDate.localeCompare(b.dueDate)) });
+  },
+  deleteDeadline: async (id) => {
+    const prev = get().deadlines;
+    set({ deadlines: prev.filter((d) => d.id !== id) });
+    try {
+      await api.del(`/api/deadlines/${id}`);
+    } catch (e: any) {
+      set({ deadlines: prev, error: e?.message ?? "Couldn't delete that deadline." });
+    }
+  },
+
+  updateProfile: async (patch) => {
+    const prev = get().profile;
+    if (!prev) return;
+    set({ profile: { ...prev, ...patch } });
+    try {
+      const updated = await api.patch<Pick<ProfileInfo, "id" | "name" | "subtitle" | "dailyTargetH">>(
+        "/api/profile",
+        patch
+      );
+      set({ profile: { ...get().profile!, ...updated } });
+    } catch (e: any) {
+      set({ profile: prev, error: e?.message ?? "Couldn't save that change." });
+    }
+  },
+
   showBanner: (msg) => {
     if (bannerTimer) clearTimeout(bannerTimer);
     set({ banner: msg });
@@ -205,4 +254,22 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   setDragId: (id) => set({ dragId: id }),
+
+  reset: () => {
+    if (bannerTimer) clearTimeout(bannerTimer);
+    set({
+      activities: [],
+      goals: [],
+      deadlines: [],
+      streak: { days: [], current: 0 },
+      toggles: [],
+      profile: null,
+      day: toISODate(new Date()),
+      dragId: null,
+      form: defaultForm,
+      banner: null,
+      loading: true,
+      error: null,
+    });
+  },
 }));
