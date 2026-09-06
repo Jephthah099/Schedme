@@ -3,13 +3,13 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: schudme
-      POSTGRES_PASSWORD: schudme
-      POSTGRES_DB: schudme
+      POSTGRES_USER: schedme
+      POSTGRES_PASSWORD: schedme
+      POSTGRES_DB: schedme
     ports:
       - "5432:5432"
     volumes:
-      - schudme_pgdata:/var/lib/postgresql/data
+      - schedme_pgdata:/var/lib/postgresql/data
 
 volumes:
-  schudme_pgdata:
+  schedme_pgdata:

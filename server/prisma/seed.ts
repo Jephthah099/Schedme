@@ -141,7 +141,7 @@ async function main() {
     },
   });
 
-  console.log("Seeded Schudme demo data.");
+  console.log("Seeded Schedme demo data.");
 }
 
 main()

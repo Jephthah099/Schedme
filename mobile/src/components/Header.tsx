@@ -13,7 +13,7 @@ export function Header({ onPressBell, unread = true }: Props) {
   return (
     <View style={styles.wrap}>
       <View>
-        <Text style={styles.wordmark}>SCHUDME</Text>
+        <Text style={styles.wordmark}>SCHEDME</Text>
         <Text style={styles.date} numberOfLines={1}>
           {formatHeaderDate(new Date())}
         </Text>

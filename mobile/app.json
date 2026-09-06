@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Schudme",
-    "slug": "schudme",
+    "name": "Schedme",
+    "slug": "schedme",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,7 +10,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "gh.edu.knust.schudme",
+      "package": "gh.edu.knust.schedme",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",

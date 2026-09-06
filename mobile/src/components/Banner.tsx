@@ -34,7 +34,7 @@ export function Banner() {
       <Pressable style={styles.card} onPress={dismissBanner}>
         <Bell size={18} color={color.accent500} />
         <Animated.View style={styles.textCol}>
-          <Text style={styles.eyebrow}>SCHUDME · NOW</Text>
+          <Text style={styles.eyebrow}>SCHEDME · NOW</Text>
           <Text style={styles.message}>{banner}</Text>
         </Animated.View>
       </Pressable>

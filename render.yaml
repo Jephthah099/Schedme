@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: schudme-api
+    name: schedme-api
     runtime: node
     rootDir: server
     plan: free
@@ -10,13 +10,13 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: schudme-db
+          name: schedme-db
           property: connectionString
       - key: PORT
         value: 4000
 
 databases:
-  - name: schudme-db
+  - name: schedme-db
     plan: free
-    databaseName: schudme
-    user: schudme
+    databaseName: schedme
+    user: schedme

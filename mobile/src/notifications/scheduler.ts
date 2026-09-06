@@ -11,13 +11,13 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const RECAP_ID = "schudme-recap-daily";
-const DIGEST_ID = "schudme-digest-weekly";
+const RECAP_ID = "schedme-recap-daily";
+const DIGEST_ID = "schedme-digest-weekly";
 
 export async function ensureAndroidChannel() {
   if (Platform.OS !== "android") return;
   await Notifications.setNotificationChannelAsync("default", {
-    name: "Schudme",
+    name: "Schedme",
     importance: Notifications.AndroidImportance.DEFAULT,
   });
 }
@@ -30,7 +30,7 @@ export async function requestPermissions(): Promise<boolean> {
 }
 
 function activityReminderId(activityId: string) {
-  return `schudme-activity-${activityId}`;
+  return `schedme-activity-${activityId}`;
 }
 
 /** Schedules (or, if the time has already passed today, skips) the pre-block reminder for one activity. */

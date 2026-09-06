@@ -111,7 +111,7 @@ function PreviewCard({
         variant === "outline" && { borderWidth: 1.5, borderColor: color.softBorder },
       ]}
     >
-      <Text style={[styles.previewEyebrow, { color: mutedColor }]}>SCHUDME · 12:50</Text>
+      <Text style={[styles.previewEyebrow, { color: mutedColor }]}>SCHEDME · 12:50</Text>
       <Text style={[styles.previewTitle, { color: textColor }]}>{title}</Text>
       <Text style={[styles.previewBody, { color: mutedColor }]}>{body}</Text>
     </View>
