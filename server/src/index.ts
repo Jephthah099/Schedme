@@ -25,3 +25,15 @@ const port = Number(process.env.PORT) || 4000;
 app.listen(port, () => {
   console.log(`Schedme API listening on http://localhost:${port}`);
 });
+
+// Render's free tier spins the service down after ~15 min with no inbound
+// requests. Self-pinging the public URL keeps it looking active so it never
+// hits that threshold. RENDER_EXTERNAL_URL is only set when deployed there.
+const externalUrl = process.env.RENDER_EXTERNAL_URL;
+if (externalUrl) {
+  setInterval(() => {
+    fetch(`${externalUrl}/health`).catch((err) => {
+      console.error("Keep-alive self-ping failed:", err.message);
+    });
+  }, 10 * 60 * 1000);
+}
